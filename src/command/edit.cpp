@@ -1267,6 +1267,31 @@ struct edit_insert_original final : public Command {
 
 }
 
+// inside the edit command registrations block
+
+// join next
+CMD_NAME("edit/join_next")
+CMD_TYPE(COMMAND_VALIDATE)
+CMD_DESCRIPTION("Join current line with next line (extend timing to next and merge texts)")
+
+void JoinNextCommand(agi::Context *c) {
+    if (!c || !c->subsGrid) return;
+    c->subsGrid->JoinWithNext();
+}
+CMD_HANDLER(JoinNextCommand) // adapt to your command macros
+
+// join last
+CMD_NAME("edit/join_last")
+CMD_TYPE(COMMAND_VALIDATE)
+CMD_DESCRIPTION("Join current line with previous line (append current text after previous)")
+
+void JoinLastCommand(agi::Context *c) {
+    if (!c || !c->subsGrid) return;
+    c->subsGrid->JoinWithPrevious();
+}
+CMD_HANDLER(JoinLastCommand) // adapt to your command macros
+
+
 namespace cmd {
 	void init_edit() {
 		reg(agi::make_unique<edit_color_primary>());
@@ -1301,5 +1326,7 @@ namespace cmd {
 		reg(agi::make_unique<edit_insert_original>());
 		reg(agi::make_unique<edit_clear>());
 		reg(agi::make_unique<edit_clear_text>());
+		reg(agi::make_unique<edit/join_next>());
+		reg(agi::make_unique<edit/join_last>());
 	}
 }
